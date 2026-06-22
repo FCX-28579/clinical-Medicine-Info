@@ -1,14 +1,8 @@
 # 为推荐临床试验新增动态药物信息报告模块
 
-## PR 标题建议
+## Branch 概要
 
-```text
-为推荐临床试验新增动态药物信息报告模块
-```
-
-## PR 概要
-
-本 PR 为 ClinicalTrialSKILL 新增一个面向推荐临床试验的动态药物信息报告模块。
+本 Branch 为 ClinicalTrialSKILL 新增一个面向推荐临床试验的动态药物信息报告模块。
 
 在患者完成临床试验匹配并得到推荐试验后，系统会针对每一个推荐试验实时读取 ClinicalTrials.gov 页面/API 信息，识别核心研究药物，并生成中文版药物信息报告。报告重点展示患者和医生复核时更需要关注的内容，包括：
 
@@ -30,7 +24,7 @@
 - 当前试验药物是否已有公开疗效数据
 - 哪些信息来自官方页面，哪些信息需要继续人工复核
 
-本 PR 在不改变原有试验匹配主流程的前提下，为推荐结果增加一个可读、可追溯、可复核的药物信息模块。
+本 Branch 在不改变原有试验匹配主流程的前提下，为推荐结果增加一个可读、可追溯、可复核的药物信息模块。
 
 ## 功能设计
 
@@ -195,18 +189,6 @@ patient_id: PT-17CE02BC33
 搜索范围: ClinicalTrials.gov only
 ```
 
-生成报告：
-
-```text
-D:\Desktop\Comparision\clinical_trial_reports\PT-17CE02BC33_ctgov_only_dynamic_drug_info_after_generic_fda\drug_info_report_zh.html
-```
-
-结构化结果：
-
-```text
-D:\Desktop\Comparision\clinical_trial_reports\PT-17CE02BC33_ctgov_only_dynamic_drug_info_after_generic_fda\dynamic_drug_modules_zh.json
-```
-
 生成结果：
 
 ```text
@@ -264,103 +246,3 @@ OK
 - 不把 ClinicalTrials.gov 申办方自动等同于药品上市许可持有人。
 - 所有药物信息都保留来源链接，方便医生或 CRC 复核。
 - FDA 可读网页只有在验证可访问时才替换 openFDA API 链接。
-
-## 如何在 GitHub 上提交这个 PR
-
-当前本地开发目录不是 git 仓库，因此不能直接在本地执行 `gh pr create`。可以按下面方式提交到 GitHub 原项目。
-
-### 方式一：网页上传/编辑提交
-
-适合不想处理 git 命令的情况。
-
-1. 打开 GitHub 原项目页面。
-2. 点击 `Fork`，将项目 fork 到自己的账号下。
-3. 在 fork 后的仓库中新建分支，例如：
-
-```text
-feature/dynamic-drug-info-report
-```
-
-4. 将本地开发目录中的改动文件复制到 fork 仓库对应路径。
-5. 在 GitHub 网页中提交 commit，commit message 建议：
-
-```text
-Add dynamic drug information report for recommended clinical trials
-```
-
-6. 回到 GitHub，点击 `Compare & pull request`。
-7. PR 标题使用：
-
-```text
-为推荐临床试验新增动态药物信息报告模块
-```
-
-8. PR 正文复制本文档中 “PR 概要” 到 “质量控制原则” 的内容。
-9. 确认 base branch 是原项目主分支，compare branch 是自己的 `feature/dynamic-drug-info-report`。
-10. 点击 `Create pull request`。
-
-### 方式二：本地 git 提交
-
-适合已经有原项目 git 仓库的情况。
-
-1. 克隆原项目或进入已有 git 仓库：
-
-```bash
-git clone <原项目 GitHub 地址>
-cd <原项目目录>
-```
-
-2. 新建分支：
-
-```bash
-git checkout -b feature/dynamic-drug-info-report
-```
-
-3. 将本地开发目录中的改动文件复制到该 git 仓库对应路径。
-
-4. 查看变更：
-
-```bash
-git status
-git diff
-```
-
-5. 提交：
-
-```bash
-git add skills/clinical-trial-matching/scripts/drug_info/dynamic_ctgov_drug_info.py
-git add skills/clinical-trial-matching/scripts/drug_info/fda_comparator
-git add skills/clinical-trial-matching/scripts/render/ctgov_dynamic_drug_report_zh.py
-git add skills/clinical-trial-matching/scripts/drug_info/test_dynamic_ctgov_drug_info.py
-git commit -m "Add dynamic drug information report for recommended clinical trials"
-```
-
-6. 推送分支：
-
-```bash
-git push origin feature/dynamic-drug-info-report
-```
-
-7. 打开 GitHub，根据页面提示创建 Pull Request。
-
-## 建议提交的文件清单
-
-请至少确认这些文件已包含在 PR 中：
-
-```text
-skills/clinical-trial-matching/scripts/drug_info/dynamic_ctgov_drug_info.py
-skills/clinical-trial-matching/scripts/drug_info/fda_comparator/__init__.py
-skills/clinical-trial-matching/scripts/drug_info/fda_comparator/query_builder.py
-skills/clinical-trial-matching/scripts/drug_info/fda_comparator/retriever.py
-skills/clinical-trial-matching/scripts/drug_info/fda_comparator/parsers.py
-skills/clinical-trial-matching/scripts/drug_info/fda_comparator/fit_scorer.py
-skills/clinical-trial-matching/scripts/drug_info/fda_comparator/finder.py
-skills/clinical-trial-matching/scripts/render/ctgov_dynamic_drug_report_zh.py
-skills/clinical-trial-matching/scripts/drug_info/test_dynamic_ctgov_drug_info.py
-```
-
-如果希望把 PR 正文也保存在仓库中，可以额外提交：
-
-```text
-PULL_REQUEST_ZH.md
-```
