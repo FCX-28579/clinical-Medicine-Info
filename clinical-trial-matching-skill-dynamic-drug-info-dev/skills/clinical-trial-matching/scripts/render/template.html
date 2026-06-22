@@ -1,0 +1,627 @@
+<!doctype html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>临床试验匹配报告</title>
+        <style>
+            :root {
+                --bg: #f7f4ee;
+                --paper: #fffdfa;
+                --text: #20261f;
+                --muted: #667064;
+                --line: #ddd6c8;
+                --brand: #245c4b;
+                --accent: #c77d1c;
+                --good: #2d6a4f;
+                --warn: #b45309;
+                --danger: #b91c1c;
+                --info: #1e5a8a;
+            }
+            * {
+                box-sizing: border-box;
+            }
+            body {
+                margin: 0;
+                font-family:
+                    "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei",
+                    sans-serif;
+                background: linear-gradient(180deg, #f4efe5, #eef4ee);
+                color: var(--text);
+                padding: 28px;
+            }
+            .page {
+                max-width: 1120px;
+                margin: 0 auto;
+                background: var(--paper);
+                border: 1px solid var(--line);
+                border-radius: 24px;
+                overflow: hidden;
+                box-shadow: 0 24px 60px rgba(65, 55, 39, 0.08);
+            }
+            header {
+                background: linear-gradient(135deg, var(--brand), #3a7a66);
+                color: #fff;
+                padding: 28px 32px;
+                display: flex;
+                justify-content: space-between;
+                gap: 24px;
+            }
+            h1 {
+                margin: 0 0 8px;
+                font-size: 30px;
+            }
+            .meta,
+            .hero-sub {
+                font-size: 14px;
+                line-height: 1.7;
+                opacity: 0.95;
+            }
+            .section {
+                padding: 26px 32px;
+                border-top: 1px solid var(--line);
+            }
+            .title {
+                font-size: 18px;
+                font-weight: 700;
+                margin-bottom: 16px;
+                color: var(--brand);
+            }
+            .grid {
+                display: grid;
+                grid-template-columns: repeat(4, minmax(0, 1fr));
+                gap: 16px;
+            }
+            .grid-3 {
+                display: grid;
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+                gap: 16px;
+            }
+            .info {
+                background: #faf8f2;
+                border: 1px solid var(--line);
+                border-radius: 16px;
+                padding: 16px;
+            }
+            .label {
+                font-size: 12px;
+                color: var(--muted);
+                margin-bottom: 8px;
+                text-transform: uppercase;
+                letter-spacing: 0.05em;
+            }
+            .value {
+                font-size: 15px;
+                font-weight: 600;
+                line-height: 1.6;
+            }
+            .summary {
+                background: #eef5f1;
+                border-left: 4px solid var(--brand);
+                padding: 18px 20px;
+                border-radius: 14px;
+                line-height: 1.8;
+            }
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                font-size: 14px;
+            }
+            th,
+            td {
+                border: 1px solid var(--line);
+                padding: 12px 14px;
+                text-align: left;
+                vertical-align: top;
+            }
+            th {
+                background: #f5f1e7;
+                color: var(--brand);
+                font-weight: 700;
+            }
+            .badge {
+                display: inline-block;
+                padding: 4px 8px;
+                border-radius: 999px;
+                font-size: 12px;
+                font-weight: 700;
+            }
+            .badge-good {
+                background: #e8f4ec;
+                color: var(--good);
+            }
+            .badge-warn {
+                background: #fff4e6;
+                color: var(--warn);
+            }
+            .badge-danger {
+                background: #fde8e8;
+                color: var(--danger);
+            }
+            .badge-info {
+                background: #e0eef8;
+                color: var(--info);
+            }
+            .badge-muted {
+                background: #f0ece3;
+                color: var(--muted);
+            }
+            .badge-nct {
+                display: inline-block;
+                background: #1a5e3a;
+                color: #fff;
+                padding: 3px 10px;
+                border-radius: 10px;
+                font-size: 12px;
+                font-weight: 700;
+                text-decoration: none;
+            }
+            /* Criterion-level assessment (collapsible per trial) */
+            .criteria-card {
+                background: #faf8f2;
+                border: 1px solid var(--line);
+                border-radius: 16px;
+                margin-bottom: 16px;
+                overflow: hidden;
+            }
+            .criteria-header {
+                padding: 14px 18px;
+                cursor: pointer;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                font-weight: 700;
+                font-size: 15px;
+                color: var(--brand);
+                user-select: none;
+            }
+            .criteria-header:hover { background: #f0ece3; }
+            .criteria-header .toggle { font-size: 12px; color: var(--muted); }
+            .criteria-body { padding: 0 18px 18px; display: none; }
+            .criteria-card.open .criteria-body { display: block; }
+            .criteria-card.open .toggle::after { content: '▲'; }
+            .criteria-card:not(.open) .toggle::after { content: '▼'; }
+            .crit-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+            .crit-table th { background: #eef5f1; color: var(--brand); font-size: 12px; padding: 8px 10px; text-align: left; }
+            .crit-table td { padding: 8px 10px; border-bottom: 1px solid #eee; vertical-align: top; }
+            .crit-table tr:last-child td { border-bottom: none; }
+            .crit-met { color: var(--good); font-weight: 700; }
+            .crit-fail { color: var(--danger); font-weight: 700; }
+            .crit-warn { color: var(--warn); font-weight: 700; }
+            .crit-unknown { color: var(--muted); font-weight: 700; }
+            .crit-summary {
+                display: flex; gap: 16px; padding: 10px 0 6px;
+                font-size: 13px; color: var(--muted);
+            }
+            .crit-summary span { font-weight: 700; }
+            ul {
+                margin: 0;
+                padding-left: 18px;
+                line-height: 1.8;
+            }
+            .gap-item {
+                background: #faf8f2;
+                border: 1px solid var(--line);
+                border-radius: 12px;
+                padding: 14px 18px;
+                margin-bottom: 12px;
+                display: flex;
+                align-items: flex-start;
+                gap: 12px;
+            }
+            .gap-item:last-child {
+                margin-bottom: 0;
+            }
+            .gap-content {
+                flex: 1;
+            }
+            .gap-title {
+                font-weight: 600;
+                font-size: 15px;
+                margin-bottom: 4px;
+            }
+            .gap-desc {
+                font-size: 13px;
+                color: var(--muted);
+                line-height: 1.6;
+            }
+            .excluded-item {
+                background: #fdf6f6;
+                border: 1px solid #f0d5d5;
+                border-radius: 12px;
+                padding: 14px 18px;
+                margin-bottom: 10px;
+            }
+            .excluded-item:last-child {
+                margin-bottom: 0;
+            }
+            .excluded-title {
+                font-weight: 600;
+                font-size: 15px;
+                color: var(--danger);
+                margin-bottom: 4px;
+            }
+            .excluded-reason {
+                font-size: 13px;
+                color: var(--muted);
+                line-height: 1.6;
+            }
+            .referral-card {
+                background: #f0f7f4;
+                border: 1px solid #c8ddd3;
+                border-radius: 16px;
+                padding: 18px 20px;
+            }
+            .referral-name {
+                font-weight: 700;
+                font-size: 16px;
+                color: var(--brand);
+                margin-bottom: 6px;
+            }
+            .referral-detail {
+                font-size: 13px;
+                color: var(--muted);
+                line-height: 1.8;
+            }
+            .todo-list {
+                list-style: none;
+                padding: 0;
+                margin: 0;
+            }
+            .todo-list li {
+                background: #faf8f2;
+                border: 1px solid var(--line);
+                border-radius: 12px;
+                padding: 14px 18px;
+                margin-bottom: 10px;
+                display: flex;
+                align-items: flex-start;
+                gap: 12px;
+                line-height: 1.7;
+            }
+            .todo-list li:last-child {
+                margin-bottom: 0;
+            }
+            .todo-checkbox {
+                width: 20px;
+                height: 20px;
+                border: 2px solid var(--brand);
+                border-radius: 4px;
+                flex-shrink: 0;
+                margin-top: 2px;
+            }
+            .todo-content {
+                flex: 1;
+            }
+            .todo-title {
+                font-weight: 600;
+                font-size: 15px;
+            }
+            .todo-desc {
+                font-size: 13px;
+                color: var(--muted);
+                margin-top: 2px;
+            }
+            .todo-owner {
+                font-size: 12px;
+                color: var(--info);
+                font-weight: 600;
+                margin-top: 4px;
+            }
+            .disclaimer-box {
+                background: #fff8e6;
+                border: 1px solid #f0dca0;
+                border-radius: 12px;
+                padding: 16px 20px;
+                margin-top: 16px;
+                font-size: 13px;
+                line-height: 1.7;
+                color: var(--warn);
+            }
+            .footer {
+                padding: 20px 32px 30px;
+                color: var(--muted);
+                font-size: 13px;
+                line-height: 1.7;
+            }
+            .mol-tag {
+                display: inline-block;
+                background: #e8f4ec;
+                color: var(--good);
+                padding: 2px 8px;
+                border-radius: 8px;
+                font-size: 12px;
+                font-weight: 600;
+                margin: 2px 4px 2px 0;
+            }
+            .mol-tag-warn {
+                background: #fff4e6;
+                color: var(--warn);
+            }
+            .mol-tag-muted {
+                background: #f0ece3;
+                color: var(--muted);
+            }
+            .timeline {
+                position: relative;
+                padding-left: 24px;
+            }
+            .timeline::before {
+                content: "";
+                position: absolute;
+                left: 8px;
+                top: 4px;
+                bottom: 4px;
+                width: 2px;
+                background: var(--line);
+            }
+            .tl-item {
+                position: relative;
+                margin-bottom: 10px;
+                padding: 8px 14px;
+                background: #faf8f2;
+                border: 1px solid var(--line);
+                border-radius: 10px;
+                font-size: 13px;
+                line-height: 1.6;
+            }
+            .tl-item::before {
+                content: "";
+                position: absolute;
+                left: -20px;
+                top: 14px;
+                width: 10px;
+                height: 10px;
+                border-radius: 50%;
+                background: var(--brand);
+                border: 2px solid var(--paper);
+            }
+            .tl-item.tl-active::before {
+                background: var(--accent);
+            }
+            .tl-item.tl-fail::before {
+                background: var(--danger);
+            }
+            .tl-time {
+                font-weight: 700;
+                color: var(--brand);
+            }
+            .tl-fail .tl-time {
+                color: var(--danger);
+            }
+            .tl-active .tl-time {
+                color: var(--accent);
+            }
+            @media (max-width: 900px) {
+                .grid,
+                .grid-3 {
+                    grid-template-columns: repeat(2, minmax(0, 1fr));
+                }
+                header {
+                    flex-direction: column;
+                }
+            }
+            @media (max-width: 640px) {
+                .grid,
+                .grid-3 {
+                    grid-template-columns: 1fr;
+                }
+                body {
+                    padding: 12px;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="page">
+            <!-- ==================== HEADER ==================== -->
+            <header>
+                <div>
+                    <h1>临床试验匹配报告</h1>
+                    <div class="hero-sub">
+                        Clinical Trial Matching Report &mdash; TrialGPT (vMTB
+                        Enhanced)
+                    </div>
+                </div>
+                <div class="meta">
+                    报告日期：{{report_date}}<br />
+                    数据源：ClinicalTrials.gov + ChiCTR<br />
+                    适用场景：试验初筛 / 路径匹配 / 服务转介
+                </div>
+            </header>
+
+            <!-- ==================== 患者画像摘要 ==================== -->
+            <!-- 使用 .grid (4列) 布局, 每个 .info 卡片包含 .label + .value -->
+            <!-- 必填字段: 癌种, 分期, 关键分子特征, 当前治疗状态, 既往治疗线数, 器官功能状态, 用药禁忌, 基本信息 -->
+            <!-- 分子特征使用 .mol-tag 标签: 关键突变用默认绿色, 不利因素用 .mol-tag-warn, 中性用 .mol-tag-muted -->
+            <section class="section">
+                <div class="title">患者画像摘要</div>
+                <div class="grid">{{patient_profile_cards}}</div>
+            </section>
+
+            <!-- ==================== 治疗史时间线 ==================== -->
+            <!-- 使用 .timeline 容器, 每条为 .tl-item -->
+            <!-- 正常节点: .tl-item, 进展/失败: .tl-item.tl-fail, 当前方案: .tl-item.tl-active -->
+            <!-- 疗效用 badge: PR/SD 用 .badge-good, PD/毒性 用 .badge-danger -->
+            <section class="section">
+                <div class="title">治疗决策史</div>
+                <div class="timeline">{{treatment_timeline}}</div>
+            </section>
+
+            <!-- ==================== 系统匹配结论 ==================== -->
+            <!-- 使用 .summary 容器, 一段话总结匹配过程和结果 -->
+            <!-- 包含: 患者关键特征, 检索策略统计, 匹配结果数量 -->
+            <section class="section">
+                <div class="title">系统匹配结论</div>
+                <div class="summary">{{matching_summary}}</div>
+            </section>
+
+            <!-- ==================== 候选临床试验 — 高度匹配 ==================== -->
+            <!-- 使用 table, 列: 匹配等级 | 注册编号 | 试验方向 | 阶段 | 匹配理由 | 入组注意事项 | 中国中心 -->
+            <!-- 匹配等级 badge: .badge-good "高匹配", .badge-info "ATM靶向"/"细胞治疗" 等 -->
+            <!-- 注册编号: <a class="badge-nct" href="链接">NCTxxxxxx</a> 可点击跳转 -->
+            <!--   NCT 链接格式: https://clinicaltrials.gov/study/NCTxxxxxx -->
+            <!--   ChiCTR 链接格式: https://www.chictr.org.cn/showproj.html?proj=ChiCTRxxxxxx -->
+            <!-- 试验方向: <strong>标题</strong> + <span style="font-size:12px;color:var(--muted)">详细描述</span> + <span>申办方信息</span> -->
+            <section class="section">
+                <div class="title">候选临床试验清单 — 高度匹配</div>
+                <div style="overflow-x: auto">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>匹配等级</th>
+                                <th>注册编号</th>
+                                <th>试验方向</th>
+                                <th>阶段</th>
+                                <th>匹配理由</th>
+                                <th>入组注意事项</th>
+                                <th>中国中心</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{high_match_rows}}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- ==================== 候选临床试验 — 条件匹配 ==================== -->
+            <!-- 同上表格, 但使用 .badge-warn "条件匹配" -->
+            <section class="section">
+                <div class="title">
+                    候选临床试验清单 — 条件匹配 (部分入组条件需确认)
+                </div>
+                <div style="overflow-x: auto">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>等级</th>
+                                <th>注册编号</th>
+                                <th>试验方向</th>
+                                <th>阶段</th>
+                                <th>匹配理由</th>
+                                <th>入组注意事项</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{conditional_match_rows}}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- ==================== 逐条入排标准评估 (Criterion-level) ==================== -->
+            <!-- 借鉴 TrialMatchAI 的 CoT 逐条评估, 对 top 候选试验的入选/排除标准逐条与患者比对 -->
+            <!-- 每个试验一个 .criteria-card (可折叠), 内含入选标准表 + 排除标准表 -->
+            <!--
+                .criteria-card > .criteria-header (点击展开/收起) + .criteria-body
+                .criteria-body 内含:
+                  - .crit-summary: 汇总统计 (如: 入选 5/8 符合, 排除 0/6 触发)
+                  - .crit-table: 逐条评估表
+                    列: 标准内容 | 判定 | 依据
+                    判定 class: .crit-met (✅符合/无冲突) / .crit-fail (❌不符合/触发排除)
+                                .crit-warn (⚠️边界/可能冲突) / .crit-unknown (❓信息缺失)
+
+                示例:
+                <div class="criteria-card open">
+                    <div class="criteria-header">
+                        <span>NCT05288205 — KRAS G12C + SHP2 抑制剂</span>
+                        <span class="toggle"></span>
+                    </div>
+                    <div class="criteria-body">
+                        <div class="crit-summary">
+                            入选标准: <span class="crit-met">5 符合</span> / <span class="crit-warn">1 边界</span> / <span class="crit-unknown">2 缺失</span>
+                            &nbsp;&nbsp;|&nbsp;&nbsp;
+                            排除标准: <span class="crit-met">4 无冲突</span> / <span class="crit-warn">1 可能冲突</span>
+                        </div>
+                        <table class="crit-table">
+                            <thead><tr><th>入选标准</th><th>判定</th><th>依据</th></tr></thead>
+                            <tbody>
+                                <tr><td>KRAS G12C mutation confirmed</td><td class="crit-met">✅ 符合</td><td>患者 KRAS G12C 11.5%</td></tr>
+                                <tr><td>eGFR ≥ 60 mL/min</td><td class="crit-warn">⚠️ 边界</td><td>患者 eGFR 58.93</td></tr>
+                            </tbody>
+                        </table>
+                        <table class="crit-table" style="margin-top:10px">
+                            <thead><tr><th>排除标准</th><th>判定</th><th>依据</th></tr></thead>
+                            <tbody>
+                                <tr><td>Prior KRAS G12C inhibitor</td><td class="crit-warn">⚠️ 可能冲突</td><td>正在用氟泽雷赛</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            -->
+            <section class="section">
+                <div class="title">逐条入排标准评估</div>
+                <p style="font-size:13px;color:var(--muted);margin:0 0 16px">
+                    对候选试验的入选/排除标准逐条与患者画像比对。点击试验名称展开/收起详情。
+                </p>
+                {{criteria_assessments}}
+            </section>
+
+            <!-- ==================== 已排除方向 ==================== -->
+            <!-- 每条: .excluded-item > .excluded-title + .excluded-reason -->
+            <section class="section">
+                <div class="title">已排除的方向及理由</div>
+                {{excluded_items}}
+            </section>
+
+            <!-- ==================== 临床中心信息 ==================== -->
+            <!-- 使用 .grid-3 (3列) 布局, 每个 .referral-card 包含 .referral-name + .referral-detail -->
+            <!-- 说明 SMO 渠道 vs 自行联系 -->
+            <section class="section">
+                <div class="title">临床中心信息汇总</div>
+                <p
+                    style="
+                        font-size: 14px;
+                        color: var(--muted);
+                        margin: 0 0 16px;
+                    "
+                >
+                    如通过 SMO 渠道，将由专人汇总病历并对接 CRC
+                    (临床研究协调员)，无需患者自行联系。如需自行联系，应找到对应医院/科室的研究者挂号咨询。
+                </p>
+                <div class="grid-3">{{referral_cards}}</div>
+            </section>
+
+            <!-- ==================== 信息缺口提示 ==================== -->
+            <!-- 每条: .gap-item > badge(紧急/重要/建议) + .gap-content(.gap-title + .gap-desc) -->
+            <!-- 紧急: .badge-danger, 重要: .badge-warn, 建议: .badge-info -->
+            <section class="section">
+                <div class="title">信息缺口提示</div>
+                {{gap_items}}
+            </section>
+
+            <!-- ==================== 下一步行动清单 ==================== -->
+            <!-- ul.todo-list > li > .todo-checkbox + .todo-content(.todo-title + .todo-desc + .todo-owner) + badge -->
+            <section class="section">
+                <div class="title">下一步行动清单</div>
+                <ul class="todo-list">
+                    {{todo_items}}
+                </ul>
+            </section>
+
+            <!-- ==================== 声明 ==================== -->
+            <section class="section" style="border-top: none; padding-top: 0">
+                <div class="disclaimer-box">
+                    <strong>声明：</strong>本报告由 TrialGPT Matching (vMTB
+                    Enhanced)
+                    系统生成，仅提供临床试验信息匹配，不构成医疗建议或治疗推荐。所有入组资格需由临床研究团队最终审核确认。建议将本报告提交给主治医生，结合患者实际情况决策。
+                </div>
+            </section>
+
+            <div class="footer">
+                数据源：ClinicalTrials.gov + ChiCTR &nbsp;|&nbsp;
+                检索日期：{{report_date}} &nbsp;|&nbsp; {{search_stats}}
+                &nbsp;|&nbsp; 工具版本：TrialGPT Matching v1.2.0
+            </div>
+        </div>
+        <script>
+            // Toggle criteria cards
+            document.querySelectorAll('.criteria-header').forEach(function(h) {
+                h.addEventListener('click', function() {
+                    this.parentElement.classList.toggle('open');
+                });
+            });
+        </script>
+    </body>
+</html>
