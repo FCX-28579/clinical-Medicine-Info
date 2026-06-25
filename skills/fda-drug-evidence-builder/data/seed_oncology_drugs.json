@@ -1,0 +1,80 @@
+[
+  {
+    "brand_name": "LUMAKRAS",
+    "generic_name": "sotorasib",
+    "drug_class": "KRAS G12C inhibitor",
+    "cancer_context": ["CRC", "NSCLC"],
+    "biomarkers": ["KRAS G12C"],
+    "readable_fda_urls": [
+      {
+        "label": "FDA approval page: sotorasib + panitumumab for KRAS G12C-mutated colorectal cancer",
+        "url": "https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-sotorasib-panitumumab-kras-g12c-mutated-colorectal-cancer",
+        "context": "CRC KRAS G12C"
+      }
+    ]
+  },
+  {
+    "brand_name": "KRAZATI",
+    "generic_name": "adagrasib",
+    "drug_class": "KRAS G12C inhibitor",
+    "cancer_context": ["CRC", "NSCLC"],
+    "biomarkers": ["KRAS G12C"],
+    "readable_fda_urls": []
+  },
+  {
+    "brand_name": "TAGRISSO",
+    "generic_name": "osimertinib",
+    "drug_class": "EGFR tyrosine kinase inhibitor",
+    "cancer_context": ["NSCLC"],
+    "biomarkers": ["EGFR exon 19 deletion", "EGFR L858R", "EGFR T790M"],
+    "readable_fda_urls": []
+  },
+  {
+    "brand_name": "RYBREVANT",
+    "generic_name": "amivantamab-vmjw",
+    "drug_class": "EGFR/MET bispecific antibody",
+    "cancer_context": ["NSCLC"],
+    "biomarkers": ["EGFR exon 20 insertion", "EGFR"],
+    "readable_fda_urls": []
+  },
+  {
+    "brand_name": "TABRECTA",
+    "generic_name": "capmatinib",
+    "drug_class": "MET inhibitor",
+    "cancer_context": ["NSCLC"],
+    "biomarkers": ["MET exon 14 skipping", "MET amplification"],
+    "readable_fda_urls": []
+  },
+  {
+    "brand_name": "TEPMETKO",
+    "generic_name": "tepotinib",
+    "drug_class": "MET inhibitor",
+    "cancer_context": ["NSCLC"],
+    "biomarkers": ["MET exon 14 skipping", "MET amplification"],
+    "readable_fda_urls": []
+  },
+  {
+    "brand_name": "ENHERTU",
+    "generic_name": "fam-trastuzumab deruxtecan-nxki",
+    "drug_class": "HER2-directed antibody-drug conjugate",
+    "cancer_context": ["BREAST", "NSCLC", "SOLID_TUMOR"],
+    "biomarkers": ["HER2", "ERBB2"],
+    "readable_fda_urls": []
+  },
+  {
+    "brand_name": "LYNPARZA",
+    "generic_name": "olaparib",
+    "drug_class": "PARP inhibitor",
+    "cancer_context": ["OVARIAN", "BREAST", "PANCREATIC", "PROSTATE"],
+    "biomarkers": ["BRCA", "HRD"],
+    "readable_fda_urls": []
+  },
+  {
+    "brand_name": "ZEJULA",
+    "generic_name": "niraparib",
+    "drug_class": "PARP inhibitor",
+    "cancer_context": ["OVARIAN"],
+    "biomarkers": ["BRCA", "HRD"],
+    "readable_fda_urls": []
+  }
+]

@@ -1,0 +1,53 @@
+{
+  "patient_id": "PT-17CE02BC33",
+  "summary": "69 岁男性, 乙状结肠中分化腺癌 IV 期 (rpT4aN2aM1), 肝/双肺/腹腔淋巴结/腹膜后淋巴结转移; KRAS G12C, MSS, TMB 7.7; 已完成 2 线 (mFOLFOX6 PR → KELOX+卡瑞利珠+阿帕替尼 SD→PD), 当前三线 KELOX+卡瑞利珠+贝伐 进行中 (CEA/CA199 下降提示部分反应); 心血管基础疾病严重 (HTN3 + CAD + 支架术后), 近期肾功能异常.",
+  "cancer_type": "CRC",
+  "stage": "IV",
+  "disease_stage": "metastatic",
+  "metastasis_sites": ["liver", "lung", "abdominal_lymph_node", "retroperitoneal_lymph_node"],
+  "mutations": ["KRAS G12C"],
+  "biomarkers_known": {
+    "MSI": "MSS",
+    "TMB": 7.7,
+    "BRAF": null,
+    "NRAS": null,
+    "HER2": null,
+    "PIK3CA": null
+  },
+  "treatment_lines_completed": 2,
+  "treatment_history": [
+    {"line": 1, "regimen": "mFOLFOX6", "cycles": 12, "outcome": "PR", "last_dose_date": "2023-01-12"},
+    {"line": 2, "regimen": "KELOX + Camrelizumab + Apatinib", "cycles": 6, "outcome": "PD", "last_dose_date": "2024-06"},
+    {"line": 3, "regimen": "KELOX + Camrelizumab + Bevacizumab", "cycles": 3, "outcome": "ongoing (markers down, PR-suggestive)", "last_dose_date": null, "ongoing": true}
+  ],
+  "prior_therapies": [
+    "mFOLFOX6", "FOLFOX", "5-FU", "leucovorin", "oxaliplatin",
+    "KELOX", "capecitabine",
+    "camrelizumab", "PD-1 inhibitor", "anti-PD-1",
+    "apatinib", "VEGFR-TKI",
+    "bevacizumab", "anti-VEGF"
+  ],
+  "ecog": 1,
+  "comorbidities": [
+    "type 2 diabetes",
+    "hypertension grade 3 very-high-risk",
+    "coronary artery disease",
+    "post-stenting (mixed stent, 2019)",
+    "renal dysfunction (chemo-related, recent)",
+    "gastroesophageal reflux",
+    "mild anemia",
+    "transient subclinical hypothyroidism (immune-related, resolved)"
+  ],
+  "organ_function": "borderline (renal dysfunction recent; cardiac EF preserved 65-74%; mild anemia HGB 110.9 g/L)",
+  "hla_typed": false,
+  "cns_imaging_done": false,
+  "viral_serology_done": false,
+  "age": 69,
+  "kps": 80,
+  "country": "China",
+  "patient_location": "山西省长治市",
+  "treating_hospital": "北京市朝阳区三环肿瘤医院",
+  "willing_to_travel_internationally": false,
+  "willing_to_travel_domestic": true,
+  "affordability_tier": "medium"
+}

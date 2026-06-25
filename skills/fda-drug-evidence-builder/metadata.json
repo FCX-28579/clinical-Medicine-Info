@@ -1,0 +1,10 @@
+{
+  "version": "1.0.0",
+  "organization": "CancerDAO",
+  "date": "June 2026",
+  "abstract": "Builds a reusable local FDA oncology drug evidence database from openFDA labels. Downloads official label data, parses indication/mechanism/clinical-study sections, extracts efficacy metrics, adds source-bound Chinese summaries, and emits JSON modules for downstream clinical-trial drug information reports.",
+  "references": [
+    "https://open.fda.gov/apis/drug/label/",
+    "https://www.fda.gov/drugs/resources-information-approved-drugs"
+  ]
+}
